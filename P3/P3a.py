@@ -3,13 +3,13 @@
 from queue import PriorityQueue
 
 def greedy_best_first_search(graph, heuristic, start, goal):
-    pq = PriorityQueue()
-    pq.put((heuristic[start], start))
+    open_list = PriorityQueue()
+    open_list.put((heuristic[start], start))
 
     visited = set()
 
-    while not pq.empty():
-        h, current = pq.get()
+    while not open_list.empty():
+        h, current = open_list.get()
 
         if current == goal:
             print("Goal found:", current)
@@ -21,7 +21,7 @@ def greedy_best_first_search(graph, heuristic, start, goal):
 
             for neighbor in graph[current]:
                 if neighbor not in visited:
-                    pq.put((heuristic[neighbor], neighbor))
+                    open_list.put((heuristic[neighbor], neighbor))
 
     print("Goal not found")
 
