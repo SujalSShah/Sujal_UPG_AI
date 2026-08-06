@@ -1,45 +1,100 @@
-# P4 Genetic Algorithm
+# ---------------------------------------------
+# Genetic Algorithm using 2-bit Chromosomes
+# Fitness Function: f(x) = x^2
+# ---------------------------------------------
 
 import random
 
-# Fitness function
+# ---------------------------------------------
+# Fitness Function
+# ---------------------------------------------
 def fitness(chromosome):
-    x = int(chromosome, 2)
-    return x * x
+    x = int(chromosome, 2)      # Convert binary to decimal
+    return x * x                # f(x) = x^2
 
-# Initial population
-population = [''.join(random.choice('01') for _ in range(4))
-              for _ in range(4)]
 
-for generation in range(10):
+# ---------------------------------------------
+# Initial Population
+# ---------------------------------------------
+population = ["00", "01", "10", "11"]
 
-    # Sort population by fitness
-    population = sorted(population,
-                        key=fitness,
-                        reverse=True)
+print("INITIAL POPULATION")
+print("------------------")
 
-    print("Generation", generation, population)
+for c in population:
+    print(c, " Decimal =", int(c,2), " Fitness =", fitness(c))
 
-    # Selection (best two)
-    parent1 = population[0]
-    parent2 = population[1]
 
-    # One-point crossover
-    point = 2
-    child1 = parent1[:point] + parent2[point:]
-    child2 = parent2[:point] + parent1[point:]
+# ---------------------------------------------
+# Selection (Best Two Chromosomes)
+# ---------------------------------------------
+population = sorted(population,
+                    key=fitness,
+                    reverse=True)
 
-    # Mutation
-    child1 = list(child1)
-    pos = random.randint(0, 3)
-    child1[pos] = '1' if child1[pos] == '0' else '0'
-    child1 = ''.join(child1)
+parent1 = population[0]
+parent2 = population[1]
 
-    # New population
-    population = [parent1, parent2, child1, child2]
+print("\nSELECTED PARENTS")
+print("----------------")
+print("Parent 1 =", parent1)
+print("Parent 2 =", parent2)
 
-# Best solution
-best = max(population, key=fitness)
-print("\nBest Chromosome =", best)
-print("x =", int(best, 2))
-print("Fitness =", fitness(best))
+
+# ---------------------------------------------
+# Single Point Crossover
+# ---------------------------------------------
+cross_point = 1
+
+child1 = parent1[:cross_point] + parent2[cross_point:]
+child2 = parent2[:cross_point] + parent1[cross_point:]
+
+print("\nAFTER CROSSOVER")
+print("----------------")
+print("Child 1 =", child1)
+print("Child 2 =", child2)
+
+
+# ---------------------------------------------
+# Mutation
+# Flip one random bit of Child 1
+# ---------------------------------------------
+bit = random.randint(0,1)
+
+child1 = list(child1)
+
+if child1[bit] == '0':
+    child1[bit] = '1'
+else:
+    child1[bit] = '0'
+
+child1 = "".join(child1)
+
+print("\nAFTER MUTATION")
+print("----------------")
+print("Mutated Child 1 =", child1)
+print("Child 2         =", child2)
+
+
+# ---------------------------------------------
+# New Population
+# ---------------------------------------------
+new_population = [child1, child2]
+
+print("\nNEW POPULATION")
+print("----------------")
+
+for c in new_population:
+    print(c, " Decimal =", int(c,2), " Fitness =", fitness(c))
+
+
+# ---------------------------------------------
+# Best Solution
+# ---------------------------------------------
+best = max(new_population, key=fitness)
+
+print("\nBEST SOLUTION")
+print("----------------")
+print("Best Chromosome =", best)
+print("Decimal Value   =", int(best,2))
+print("Maximum Fitness =", fitness(best))
